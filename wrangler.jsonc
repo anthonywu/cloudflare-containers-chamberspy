@@ -1,0 +1,39 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "chamberspy",
+  "main": "worker/index.ts",
+  "compatibility_date": "2025-07-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+  },
+  "vars": {
+    "CONFIG_1": "this is a plaintext config you can set in wrangler.jsonc",
+  },
+  "containers": [
+    {
+      "class_name": "ChamberSpy",
+      "image": "./Dockerfile",
+      "max_instances": 10,
+      "name": "chamberspy-container",
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "ChamberSpy",
+        "name": "CHAMBERSPY",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "new_sqlite_classes": ["ChamberSpy"],
+      "tag": "v1",
+    },
+  ],
+}

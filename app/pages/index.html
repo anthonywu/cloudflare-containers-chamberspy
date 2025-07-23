@@ -1,0 +1,533 @@
+<!doctype html>
+<html>
+    <head>
+        <title>ChamberSpy</title>
+        <style>
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+            h1 {
+                color: #333;
+                border-bottom: 2px solid #007bff;
+                padding-bottom: 10px;
+            }
+            .route-group {
+                background: white;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .route-group h2 {
+                color: #555;
+                margin-top: 0;
+                font-size: 1.2em;
+            }
+            .route {
+                margin: 10px 0;
+                padding: 8px 0;
+                border-bottom: 1px solid #eee;
+            }
+            .route:last-child {
+                border-bottom: none;
+            }
+            .route-name {
+                font-weight: bold;
+                color: #007bff;
+                display: inline-block;
+                width: 120px;
+            }
+            .route-desc {
+                color: #666;
+                margin-left: 10px;
+            }
+            .links {
+                margin-left: 130px;
+                margin-top: 5px;
+            }
+            a {
+                color: #007bff;
+                text-decoration: none;
+                margin-right: 15px;
+                padding: 2px 8px;
+                border-radius: 4px;
+                background: #e7f3ff;
+            }
+            a:hover {
+                background: #d0e7ff;
+                text-decoration: underline;
+            }
+            .note {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 4px;
+                padding: 10px;
+                margin-top: 20px;
+                color: #856404;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>☁️📦🔍 ChamberSpy</h1>
+        <p>
+            Putting you as close to the bare metal as Cloudflare Containers
+            would allow.
+        </p>
+        <p>
+            🕵🏼 developed by:
+            <a
+                href="https://github.com/anthonywu/cloudflare-containers-chamberspy"
+                >github.com/anthonywu</a
+            >
+            💬 <a href="https://x.com/anthonywu">@anthonywu</a>
+        </p>
+
+        <div class="route-group">
+            <h2>Core System Info</h2>
+
+            <div class="route">
+                <span class="route-name">/env</span>
+                <span class="route-desc">Environment variables</span>
+                <div class="links">
+                    <a href="/env">JSON</a>
+                    <a href="/env?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/platform</span>
+                <span class="route-desc">OS and platform information</span>
+                <div class="links">
+                    <a href="/platform">JSON</a>
+                    <a href="/platform?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/python</span>
+                <span class="route-desc">Python interpreter details</span>
+                <div class="links">
+                    <a href="/python">JSON</a>
+                    <a href="/python?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/pipfreeze</span>
+                <span class="route-desc"
+                    >Installed packages list (pip freeze)</span
+                >
+                <div class="links">
+                    <a href="/pipfreeze">Text only</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/network</span>
+                <span class="route-desc">Network interfaces and hostname</span>
+                <div class="links">
+                    <a href="/network">JSON</a>
+                    <a href="/network?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/disk</span>
+                <span class="route-desc">Disk usage information</span>
+                <div class="links">
+                    <a href="/disk">JSON</a>
+                    <a href="/disk?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/process</span>
+                <span class="route-desc">Current process information</span>
+                <div class="links">
+                    <a href="/process">JSON</a>
+                    <a href="/process?format=text">Text</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="route-group">
+            <h2>Security & Permissions</h2>
+
+            <div class="route">
+                <span class="route-name">/security</span>
+                <span class="route-desc"
+                    >User, capabilities, and security context</span
+                >
+                <div class="links">
+                    <a href="/security">JSON</a>
+                    <a href="/security?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/limits</span>
+                <span class="route-desc">Resource limits and cgroups info</span>
+                <div class="links">
+                    <a href="/limits">JSON</a>
+                    <a href="/limits?format=text">Text</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="route-group">
+            <h2>Container-Specific</h2>
+
+            <div class="route">
+                <span class="route-name">/cloudflare</span>
+                <span class="route-desc"
+                    >Cloudflare-specific environment info</span
+                >
+                <div class="links">
+                    <a href="/cloudflare">JSON</a>
+                    <a href="/cloudflare?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/mounts</span>
+                <span class="route-desc">Mounted filesystems and volumes</span>
+                <div class="links">
+                    <a href="/mounts">JSON</a>
+                    <a href="/mounts?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/storage</span>
+                <span class="route-desc"
+                    >Inspect /storage directory contents</span
+                >
+                <div class="links">
+                    <a href="/storage">JSON</a>
+                    <a href="/storage?format=text">Text</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="route-group">
+            <h2>Connectivity & Runtime</h2>
+
+            <div class="route">
+                <span class="route-name">/dns</span>
+                <span class="route-desc"
+                    >DNS configuration and resolution tests</span
+                >
+                <div class="links">
+                    <a href="/dns">JSON</a>
+                    <a href="/dns?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/connectivity</span>
+                <span class="route-desc">Test external connectivity</span>
+                <div class="links">
+                    <a href="/connectivity">JSON</a>
+                    <a href="/connectivity?format=text">Text</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/runtime</span>
+                <span class="route-desc"
+                    >Runtime capabilities and features</span
+                >
+                <div class="links">
+                    <a href="/runtime">JSON</a>
+                    <a href="/runtime?format=text">Text</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="route-group">
+            <h2>Admin</h2>
+
+            <div class="route">
+                <span class="route-name">/all</span>
+                <span class="route-desc">Complete system dump</span>
+                <div class="links">
+                    <a href="/all">JSON only</a>
+                </div>
+            </div>
+
+            <div class="route">
+                <span class="route-name">/debug</span>
+                <span class="route-desc">Test each endpoint individually</span>
+                <div class="links">
+                    <a href="/debug">JSON only</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="route-group">
+            <h2>Command Execution - For Admin and Debug Only</h2>
+            <p>
+                Disable this in real apps. It's here because you can't ssh into
+                these containers, and sometimes, you just NEED TO KNOW what's in
+                the box.
+            </p>
+            <div style="padding: 10px 0">
+                <form
+                    id="exec-form"
+                    style="display: flex; gap: 10px; align-items: center"
+                >
+                    <input
+                        type="text"
+                        id="cmd-input"
+                        placeholder="Enter command (e.g., ls -la, pwd, echo hello)"
+                        style="
+                            flex: 1;
+                            padding: 8px 12px;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            font-family: monospace;
+                        "
+                    />
+                    <button
+                        type="submit"
+                        id="exec-button"
+                        style="
+                            padding: 8px 20px;
+                            background: #007bff;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-weight: bold;
+                        "
+                        onmouseover="this.style.background='#0056b3'"
+                        onmouseout="this.style.background='#007bff'"
+                    >
+                        Execute
+                    </button>
+                </form>
+                <div
+                    id="available-commands"
+                    style="margin-top: 8px; font-size: 0.85em; color: #666"
+                >
+                    <span style="font-weight: bold"
+                        >Loading available commands...</span
+                    >
+                </div>
+                <div
+                    id="exec-error"
+                    style="color: red; margin-top: 10px; display: none"
+                ></div>
+                <div id="exec-result" style="margin-top: 15px; display: none">
+                    <div
+                        style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 5px;
+                        "
+                    >
+                        <span style="font-weight: bold; color: #555"
+                            >Output:</span
+                        >
+                        <span
+                            id="return-code"
+                            style="font-size: 0.9em; color: #666"
+                        ></span>
+                    </div>
+                    <textarea
+                        id="result-output"
+                        readonly
+                        style="
+                            width: 100%;
+                            min-height: 200px;
+                            padding: 10px;
+                            font-family: monospace;
+                            font-size: 13px;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            background-color: #f8f8f8;
+                            resize: vertical;
+                        "
+                    ></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>Note:</strong> The /exec endpoint (POST) executes shell
+            commands with a 30-second timeout.
+        </div>
+
+        <script>
+            // Load available commands on page load
+            async function loadAvailableCommands() {
+                try {
+                    const response = await fetch("/commands");
+                    const data = await response.json();
+
+                    const commandsDiv =
+                        document.getElementById("available-commands");
+                    if (data.commands && data.commands.length > 0) {
+                        // Sort commands alphabetically
+                        const sortedCommands = data.commands.sort();
+
+                        // Group common commands
+                        const commonCommands = [
+                            "ls",
+                            "cat",
+                            "grep",
+                            "find",
+                            "ps",
+                            "df",
+                            "curl",
+                            "python",
+                            "uv",
+                        ];
+                        const availableCommon = sortedCommands.filter((cmd) =>
+                            commonCommands.includes(cmd),
+                        );
+                        const otherCommands = sortedCommands.filter(
+                            (cmd) => !commonCommands.includes(cmd),
+                        );
+
+                        let html =
+                            '<span style="font-weight: bold;">Available commands:</span> ';
+
+                        if (availableCommon.length > 0) {
+                            html +=
+                                '<span style="color: #007bff;">' +
+                                availableCommon.join(", ") +
+                                "</span>";
+                            if (otherCommands.length > 0) {
+                                html += " | ";
+                            }
+                        }
+
+                        if (otherCommands.length > 0) {
+                            // Show first few other commands
+                            const displayOthers = otherCommands.slice(0, 10);
+                            html += displayOthers.join(", ");
+                            if (otherCommands.length > 10) {
+                                html += ` <span style="color: #999;">... and ${otherCommands.length - 10} more</span>`;
+                            }
+                        }
+
+                        html += ` <span style="color: #999;">(${data.count} total)</span>`;
+                        commandsDiv.innerHTML = html;
+                    } else {
+                        commandsDiv.innerHTML =
+                            '<span style="color: #999;">No standard commands found in PATH</span>';
+                    }
+                } catch (error) {
+                    document.getElementById("available-commands").innerHTML =
+                        '<span style="color: #999;">Could not load available commands</span>';
+                }
+            }
+
+            // Load commands when page loads
+            loadAvailableCommands();
+
+            document
+                .getElementById("exec-form")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    const cmdInput = document.getElementById("cmd-input");
+                    const button = document.getElementById("exec-button");
+                    const errorDiv = document.getElementById("exec-error");
+                    const resultDiv = document.getElementById("exec-result");
+                    const outputTextarea =
+                        document.getElementById("result-output");
+                    const returnCodeSpan =
+                        document.getElementById("return-code");
+                    const cmd = cmdInput.value.trim();
+
+                    if (!cmd) {
+                        errorDiv.textContent = "Please enter a command";
+                        errorDiv.style.display = "block";
+                        resultDiv.style.display = "none";
+                        return;
+                    }
+
+                    // Disable button and show loading state
+                    button.disabled = true;
+                    button.textContent = "Executing...";
+                    errorDiv.style.display = "none";
+                    resultDiv.style.display = "none";
+
+                    try {
+                        const response = await fetch("/exec", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ cmd: cmd }),
+                        });
+
+                        const data = await response.json();
+
+                        // Build output text
+                        let output = `$ ${cmd}\n`;
+                        output += `Return code: ${data.returncode}\n\n`;
+
+                        if (data.stdout) {
+                            output += `--- STDOUT ---\n${data.stdout}\n`;
+                        }
+
+                        if (data.stderr) {
+                            if (data.stdout) output += "\n";
+                            output += `--- STDERR ---\n${data.stderr}\n`;
+                        }
+
+                        if (data.error) {
+                            if (data.stdout || data.stderr) output += "\n";
+                            output += `--- ERROR ---\n${data.error}\n`;
+                        }
+
+                        if (!data.stdout && !data.stderr && !data.error) {
+                            output += "(No output)";
+                        }
+
+                        // Display results
+                        outputTextarea.value = output;
+                        returnCodeSpan.textContent = `Return code: ${data.returncode}`;
+                        returnCodeSpan.style.color =
+                            data.returncode === 0 ? "#28a745" : "#dc3545";
+                        resultDiv.style.display = "block";
+
+                        // Auto-resize textarea to fit content
+                        outputTextarea.style.height = "auto";
+                        outputTextarea.style.height =
+                            Math.min(outputTextarea.scrollHeight + 4, 600) +
+                            "px";
+                    } catch (error) {
+                        errorDiv.textContent = `Error: ${error.message}`;
+                        errorDiv.style.display = "block";
+                    } finally {
+                        // Re-enable button
+                        button.disabled = false;
+                        button.textContent = "Execute";
+                    }
+                });
+
+            // Allow Enter key to submit
+            document
+                .getElementById("cmd-input")
+                .addEventListener("keypress", (e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        document
+                            .getElementById("exec-form")
+                            .dispatchEvent(new Event("submit"));
+                    }
+                });
+        </script>
+    </body>
+</html>
