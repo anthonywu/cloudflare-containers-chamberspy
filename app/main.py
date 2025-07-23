@@ -1032,6 +1032,15 @@ def available_commands():
 @app.post("/exec")
 def exec_command(request: ExecRequest):
     """Execute a shell command (use with caution)."""
+    if not 'ENABLE_EXEC_ROUTE' in os.environ:
+        return {
+            "command": request.cmd,
+            "returncode": None,
+            "stdout": None,
+            "stderr": "Disabled in this demo. Set env var ENABLE_EXEC_ROUTE in your Container envVars to enable.",
+            "success": False
+        }
+
     if not request.cmd:
         raise HTTPException(status_code=400, detail="Command cannot be empty")
 
