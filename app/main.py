@@ -699,7 +699,7 @@ def cloudflare_info(format: str = "json"):
     info = {
         "cloudflare_env": cf_env,
         "is_cloudflare_container": "CLOUDFLARE_DEPLOYMENT_ID" in cf_env,
-        "is_wrangler_dev": "xxx" in os.environ.get("CLOUDFLARE_APPLICATION_ID"),
+        "is_wrangler_dev": "xxx" in os.environ.get("CLOUDFLARE_APPLICATION_ID", ""),
         "application_id": os.environ.get("CLOUDFLARE_APPLICATION_ID"),
         "durable_object_id": os.environ.get("CLOUDFLARE_DURABLE_OBJECT_ID"),
     }

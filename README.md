@@ -2,7 +2,7 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/anthonywu/cloudflare-containers-chamberspy)
 
-Deploying a Environment inspection FastAPI application to [Cloudflare Containers](https://developers.cloudflare.com/containers/) for the purpose of understanding the runtime of the [Firecracker container](https://firecracker-microvm.github.io) backing your [Worker](https://workers.cloudflare.com). This is as close as you can get to "bare metal" in this cloud offering.
+Deploying a Environment inspection FastAPI application to [Cloudflare Containers](https://developers.cloudflare.com/containers/) for the purpose of understanding the runtime of the [Firecracker container](https://firecracker-microvm.github.io) backing your [Worker](https://workers.cloudflare.com). This is as close as you can get to "bare metal" in this cloud offering. [more on WHY?](https://x.com/anthonywu/status/1948173891526074750)
 
  <img src="./docs/home.png" alt="Alt text" style="width: 50%;">
 
@@ -14,6 +14,8 @@ You should:
 
 1. deploy this or a fork of this repo to your Cloudflare account and observe that it works as advertised
 1. copy/paste relevant parts of this repo to your actual app
+1. when your page/routes are up, visit the `format=json` routes with a json prettifier browser extension or `curl` output to `jq`
+1. study the system resources to understand how to deploy and run your app in this environment
 1. when you successfully deploy "v1" of your app, you won't need this setup anymore
 
 ## The important parts
@@ -72,7 +74,9 @@ again, test the Python-only app in local container runtime and access on `http:/
 wrangler dev --port 30000  # or 'just dev'
 ```
 
-then deploy to Cloudflare with:
+NOTE: you will need to visit `http://localhost:30000` to cause your container to start up on demand in Miniflare. Closely tail your terminal log at this point.
+
+If the local Miniflare dev deployment looks good, then deploy to Cloudflare with:
 
 ```bash
 wrangler deploy # or 'just deploy'
