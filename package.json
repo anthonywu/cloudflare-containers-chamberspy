@@ -1,12 +1,12 @@
 {
   "name": "containers",
-  "description": "Build a Container-backed Worker with a FastAPI admin app that can inspect the container environment.",
+  "description": "ChamberSpy: Container-backed Worker with a FastAPI admin app that can inspect the container environment.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
+    "dev": "wrangler dev --port 30000",
+    "start": "wrangler dev --port 30000",
     "cf-typegen": "wrangler types"
   },
   "devDependencies": {

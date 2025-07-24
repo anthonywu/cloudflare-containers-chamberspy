@@ -8,7 +8,7 @@ Deploying a Environment inspection FastAPI application to [Cloudflare Containers
 
 # Usage
 
-This repo is meant to serve as a runnable reference, supplementing the official docs.
+This repo is meant to serve as a **Developer Education** reference, supplementing the official docs.
 
 You should:
 
