@@ -1,8 +1,8 @@
 # cloudflare-containers-chamberspy
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/anthonywu/cloudflare-containers-chamberspy)
+Deploying a Environment inspection FastAPI application to [Cloudflare Containers](https://developers.cloudflare.com/containers/) for the purpose of understanding the runtime of the [Firecracker container](https://firecracker-microvm.github.io) backing your [Worker](https://workers.cloudflare.com).
 
-Deploying a Environment inspection FastAPI application to [Cloudflare Containers](https://developers.cloudflare.com/containers/) for the purpose of understanding the runtime of the [Firecracker container](https://firecracker-microvm.github.io) backing your [Worker](https://workers.cloudflare.com). This is as close as you can get to "bare metal" in this cloud offering. [more on WHY?](https://x.com/anthonywu/status/1948173891526074750)
+This is as close as you can get to "bare metal" in this cloud offering. [more on WHY?](https://x.com/anthonywu/status/1948173891526074750)
 
  <img src="./docs/home.png" alt="Alt text" style="width: 50%;">
 
