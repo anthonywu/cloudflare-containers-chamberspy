@@ -18,7 +18,7 @@ app = FastAPI(
 )
 
 
-def get_available_commands():
+def get_available_commands() -> dict[str, str]:
     """Helper function to check which commands are available in the system."""
     commands = [
         "python",
@@ -67,7 +67,7 @@ def get_available_commands():
         "g++",
     ]
 
-    available_commands = {}
+    available_commands: dict[str, str] = {}
     for cmd in commands:
         try:
             result = subprocess.run(
@@ -96,7 +96,8 @@ def index():
 @app.get("/env")
 def env_info(format: str = "json"):
     """Show all environment variables."""
-    env_vars = dict(os.environ)
+    # Filter out sensitive keys
+    env_vars = {k: v for k, v in os.environ.items() if k != "GPG_KEY"}
 
     if format == "text":
         lines = [f"{k}={v}" for k, v in sorted(env_vars.items())]
@@ -173,7 +174,7 @@ def python_info(format: str = "json"):
 
 
 @app.get("/pipfreeze", response_class=PlainTextResponse)
-def pipfreeze_info():
+def pipfreeze_info() -> str:
     """Show installed packages (pip freeze output) - always returns plain text."""
     try:
         result = subprocess.run(
@@ -747,7 +748,7 @@ def mounts_info(format: str = "json"):
                             "options": parts[3].split(","),
                         }
                     )
-    except Exception as e:
+    except Exception:
         return {"mounts": None, "mount_count": 0}
 
     # Get disk usage for each mount
@@ -958,8 +959,8 @@ def runtime_info(format: str = "json"):
         "total_human": f"{vm.total / (1024**3):.2f} GB",
     }
 
-    # Check available commands
-    info["available_commands"] = get_available_commands()
+    # Check available commands: name -> path
+    info["available_commands"]: dict[str, str] = get_available_commands()
 
     # Check for special files
     special_files = {
@@ -984,27 +985,26 @@ def runtime_info(format: str = "json"):
         info["os_release"] = None
 
     if format == "text":
-        lines = [
-            f"CPU: {info.get('cpu_model', 'Unknown')}",
-            f"CPU Count: {info.get('cpu_count', 'Unknown')}",
-            f"Memory: {info['memory']['total_human']}",
-            "",
-            "Available Commands:",
-        ]
-
-        available = [cmd for cmd, present in available_commands.items() if present]
-        missing = [cmd for cmd, present in available_commands.items() if not present]
+        lines = []
+        lines.extend(
+            [
+                f"CPU: {info.get('cpu_model', 'Unknown')}",
+                f"CPU Count: {info.get('cpu_count', 'Unknown')}",
+                f"Memory: {info['memory']['total_human']}",
+                "",
+                "Available Commands:",
+            ]
+        )
+        available = [cmd for cmd, path in info.get("available_commands", {}).items()]
 
         if available:
-            lines.append(f"  Present: {', '.join(sorted(available))}")
-        if missing:
-            lines.append(f"  Missing: {', '.join(sorted(missing))}")
+            lines.append(f"  {', '.join(sorted(available))}")
 
         if info.get("os_release"):
             lines.extend(
                 [
                     "",
-                    "OS Info:",
+                    "Linux OS Info:",
                     f"  Name: {info['os_release'].get('NAME', 'Unknown')}",
                     f"  Version: {info['os_release'].get('VERSION', 'Unknown')}",
                 ]
@@ -1032,13 +1032,13 @@ def available_commands():
 @app.post("/exec")
 def exec_command(request: ExecRequest):
     """Execute a shell command (use with caution)."""
-    if not 'ENABLE_EXEC_ROUTE' in os.environ:
+    if int(os.environ.get("ENABLE_EXEC_ROUTE", "0")) <= 0:
         return {
             "command": request.cmd,
             "returncode": None,
             "stdout": None,
-            "stderr": "Disabled in this demo. Set env var ENABLE_EXEC_ROUTE in your Container envVars to enable.",
-            "success": False
+            "stderr": "Disabled in this demo. Set env var ENABLE_EXEC_ROUTE=1 in your Container envVars to enable.",
+            "success": False,
         }
 
     if not request.cmd:
